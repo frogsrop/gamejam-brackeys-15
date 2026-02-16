@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using TMPro;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterControl : MonoBehaviour
@@ -10,9 +11,18 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] InputActionAsset inputActions;
 
+    [Header("Hint Panel")]
+    [SerializeField] private GameObject hintPanel;
+    [Tooltip("World-space offset from the character (e.g. 0, 1.5, 0 = above).")]
+    [SerializeField] private Vector3 hintPanelOffset = new Vector3(0f, 1.5f, 0f);
+    [SerializeField] private TMP_Text hintTextComponent;
+    [SerializeField] private string defaultHintText = "Press E to interact";
+
     InputAction _moveAction;
     InputAction _interactAction;
     float _moveInput;
+    IInteractable _currentInteractable;
+    GameObject _currentInteractableObject;
 
     void Awake()
     {
@@ -43,6 +53,8 @@ public class CharacterControl : MonoBehaviour
     void Update()
     {
         _moveInput = _moveAction != null ? _moveAction.ReadValue<Vector2>().x : 0f;
+        if (hintPanel != null && hintPanel.activeSelf)
+            hintPanel.transform.position = transform.position + hintPanelOffset;
     }
 
     void FixedUpdate()
@@ -62,7 +74,47 @@ public class CharacterControl : MonoBehaviour
 
     void Interact()
     {
-        // Override or hook up your interaction logic (e.g. raycast, overlap for interactables)
+        if (_currentInteractable != null)
+        {
+            _currentInteractable.Interact(gameObject);
+            return;
+        }
         Debug.Log("Interact pressed");
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        var interactable = other.GetComponent<IInteractable>()
+            ?? other.GetComponentInParent<IInteractable>()
+            ?? other.GetComponentInChildren<IInteractable>();
+        if (interactable != null)
+        {
+            _currentInteractable = interactable;
+            _currentInteractableObject = other.gameObject;
+        }
+
+        if (hintPanel == null) return;
+
+        hintPanel.transform.position = transform.position + hintPanelOffset;
+        hintPanel.SetActive(true);
+
+        string text = defaultHintText;
+        var hintTrigger = other.GetComponent<HintTrigger>();
+        if (hintTrigger != null)
+            text = hintTrigger.HintText;
+
+        if (hintTextComponent != null)
+            hintTextComponent.text = text;
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject == _currentInteractableObject)
+        {
+            _currentInteractable = null;
+            _currentInteractableObject = null;
+        }
+        if (hintPanel != null)
+            hintPanel.SetActive(false);
     }
 }
