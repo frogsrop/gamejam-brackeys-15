@@ -17,17 +17,21 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] private Vector3 hintPanelOffset = new Vector3(0f, 1.5f, 0f);
     [SerializeField] private TMP_Text hintTextComponent;
     [SerializeField] private string defaultHintText = "Press E to interact";
+    [SerializeField] private Transform body;
 
     InputAction _moveAction;
     InputAction _interactAction;
     float _moveInput;
     IInteractable _currentInteractable;
     GameObject _currentInteractableObject;
+    Animator animator;
 
     void Awake()
     {
         if (rb == null)
             rb = GetComponent<Rigidbody2D>();
+        if (animator == null)
+            animator = GetComponent<Animator>();
     }
 
     void OnEnable()
@@ -55,6 +59,13 @@ public class CharacterControl : MonoBehaviour
         _moveInput = _moveAction != null ? _moveAction.ReadValue<Vector2>().x : 0f;
         if (hintPanel != null && hintPanel.activeSelf)
             hintPanel.transform.position = transform.position + hintPanelOffset;
+            
+        animator.SetFloat("WalkSpeed", Mathf.Abs(_moveInput));
+        Vector3 s = gameObject.transform.localScale;
+        var newScale = new Vector3(Mathf.Sign(-_moveInput), s.y, s.z);
+        if (Mathf.Abs(_moveInput) > 0) {
+            gameObject.transform.localScale = newScale;
+        } 
     }
 
     void FixedUpdate()
