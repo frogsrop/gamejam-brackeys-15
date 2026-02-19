@@ -59,13 +59,13 @@ public class CharacterControl : MonoBehaviour
         _moveInput = _moveAction != null ? _moveAction.ReadValue<Vector2>().x : 0f;
         if (hintPanel != null && hintPanel.activeSelf)
             hintPanel.transform.position = transform.position + hintPanelOffset;
-            
+
         animator.SetFloat("WalkSpeed", Mathf.Abs(_moveInput));
         Vector3 s = gameObject.transform.localScale;
         var newScale = new Vector3(Mathf.Sign(-_moveInput), s.y, s.z);
         if (Mathf.Abs(_moveInput) > 0) {
             gameObject.transform.localScale = newScale;
-        } 
+        }
     }
 
     void FixedUpdate()

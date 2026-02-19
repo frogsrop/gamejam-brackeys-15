@@ -19,6 +19,9 @@ public class ListenerEntry
 
 public class Listener : MonoBehaviour
 {
+    [Tooltip("If true, the ghost always triggers this listener (ignores ghost triggerProbability).")]
+    public bool alwaysTrigger = false;
+
     [Tooltip("Each entry fires independently with its own probability and delay.")]
     [SerializeField] private List<ListenerEntry> entries = new List<ListenerEntry>();
 

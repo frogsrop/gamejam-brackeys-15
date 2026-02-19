@@ -131,11 +131,12 @@ public class GhostMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (Random.value > triggerProbability) return;
-
         var listener = other.GetComponent<Listener>();
-        if (listener != null)
-            listener.Trigger();
+        if (listener == null) return;
+
+        if (!listener.alwaysTrigger && Random.value > triggerProbability) return;
+
+        listener.Trigger();
     }
 
     private float GetSpeedMultiplier()
