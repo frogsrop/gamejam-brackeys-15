@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 public abstract class Node : MonoBehaviour
 {
-    public float probability = 1;
-    public List<Node> children = new List<Node>();
-    
-
-    public abstract void RunNode();
+    public List<Node> nodeChildren = new List<Node>();
+    public abstract void UpdateNode();
+    public abstract void ActivateNode();
+    public abstract void RestoreNode();
+    public bool activated = false;
 }
