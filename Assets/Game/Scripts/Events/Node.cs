@@ -9,4 +9,6 @@ public abstract class Node : MonoBehaviour
     public abstract void ActivateNode();
     public abstract void RestoreNode();
     public bool activated = false;
+    /// <summary>True if this node was activated by ghost event (not normal parent-child flow).</summary>
+    public bool activatedByGhost = false;
 }
