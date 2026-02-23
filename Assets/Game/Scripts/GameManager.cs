@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour
     [Header("Win / Lose")]
     [Tooltip("Scene to load on Win or Lose. Result is stored in GameManager.LastGameWon (true = win, false = lose).")]
     [SerializeField] private string winLoseSceneName = "WinLoseScene";
+    [Tooltip("Seconds to wait after correct ghost report before loading the win scene (lets player see feedback/screenshot).")]
+    [SerializeField] private float delayBeforeWinSeconds = 2f;
 
     /// <summary>Set before loading WinLose scene. Read in that scene's Start to know if the player won or lost.</summary>
     public static bool LastGameWon { get; private set; }
@@ -122,6 +125,15 @@ public class GameManager : MonoBehaviour
     /// <summary>Called when the player reports and it was a correct guess (ghost). Override or subscribe from code.</summary>
     public virtual void OnCorrectGuess()
     {
+        if (delayBeforeWinSeconds > 0f)
+            StartCoroutine(WinAfterDelay(delayBeforeWinSeconds));
+        else
+            Win();
+    }
+
+    IEnumerator WinAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
         Win();
     }
 

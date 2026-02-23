@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -38,7 +39,10 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] private int captureResolution = 256;
     [Tooltip("For World Space Canvas: scale of the screenshot in world units (e.g. 0.01 = small).")]
     [SerializeField] private float screenshotWorldScale = 0.01f;
+    [Tooltip("Seconds to show the report screenshot before hiding it.")]
+    [SerializeField] private float screenshotDisplaySeconds = 3f;
     float _nextTriggerPollTime;
+    Coroutine _screenshotHideCoroutine;
 
     InputAction _moveAction;
     InputAction _interactAction;
@@ -212,6 +216,8 @@ public class CharacterControl : MonoBehaviour
             prev.Release();
         screenshotRawImage.texture = rt;
         screenshotRawImage.uvRect = new Rect(0, 0, 1, 1);
+        if (enableGhostChildren && GameManager.Instance != null)
+            GameManager.SetScreenshotFromRenderTexture(rt);
         var parent = screenshotRawImage.rectTransform.parent as RectTransform;
         var photoRoot = parent != null ? parent : screenshotRawImage.rectTransform;
         photoRoot.gameObject.SetActive(true);
@@ -225,6 +231,18 @@ public class CharacterControl : MonoBehaviour
             photoRoot.position = new Vector3(cornerPos.x, cornerPos.y, keepZ);
             photoRoot.localScale = Vector3.one * screenshotWorldScale;
         }
+        if (_screenshotHideCoroutine != null)
+            StopCoroutine(_screenshotHideCoroutine);
+        if (screenshotDisplaySeconds > 0f)
+            _screenshotHideCoroutine = StartCoroutine(HideScreenshotAfterDelay(photoRoot.gameObject, screenshotDisplaySeconds));
+    }
+
+    IEnumerator HideScreenshotAfterDelay(GameObject photoRoot, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (photoRoot != null)
+            photoRoot.SetActive(false);
+        _screenshotHideCoroutine = null;
     }
 
     void OnRestorePerformed(InputAction.CallbackContext _)
