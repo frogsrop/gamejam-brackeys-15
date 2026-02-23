@@ -8,6 +8,8 @@ public class AudioAnimationNode : Node
     [SerializeField] private bool loop = false;
     [Tooltip("Seconds until auto-restore. -1 = never.")]
     [SerializeField] private float deactivationTimer = -1f;
+    [Tooltip("If true, restore rewinds to start instead of playing backwards (or jumping to end).")]
+    [SerializeField] private bool restoreByRewind = false;
     private Animation? animationComponent;
     private Animator? animator;
     private AudioSource? audioSource;
@@ -51,15 +53,26 @@ public class AudioAnimationNode : Node
         CancelInvoke(nameof(RestoreNode));
         if (animator != null)
         {
-            animator.Play(MainAnimationName, 0, 1f);
+            if (restoreByRewind)
+                animator.Rebind();
+            else
+                animator.Play(MainAnimationName, 0, 1f);
         }
         else if (animationComponent != null && animationComponent.clip != null)
         {
             AnimationState state = animationComponent[animationComponent.clip.name];
             state.wrapMode = WrapMode.Once;
-            state.time = state.length;
-            state.speed = -1f;
-            animationComponent.Play();
+            if (restoreByRewind)
+            {
+                animationComponent.Stop();
+                state.time = 0f;
+            }
+            else
+            {
+                state.time = state.length;
+                state.speed = -1f;
+                animationComponent.Play();
+            }
         }
         activated = false;
     }

@@ -111,6 +111,14 @@ public class CharacterControl : MonoBehaviour
 
     void Update()
     {
+        if (GhostReveal.IsPreviewingPhoto)
+        {
+            _moveInput = 0f;
+            if (animator != null) animator.SetFloat("WalkSpeed", 0f);
+            if (hintsRoot != null)
+                PositionHints();
+            return;
+        }
         _moveInput = _moveAction != null ? _moveAction.ReadValue<Vector2>().x : 0f;
         PollTriggers();
         if (hintsRoot != null)
@@ -135,6 +143,7 @@ public class CharacterControl : MonoBehaviour
 
     void OnInteractPerformed(InputAction.CallbackContext _)
     {
+        if (GhostReveal.IsPreviewingPhoto) return;
         Interact();
     }
 
@@ -150,6 +159,7 @@ public class CharacterControl : MonoBehaviour
 
     void OnReportPerformed(InputAction.CallbackContext _)
     {
+        if (GhostReveal.IsPreviewingPhoto) return;
         if (_currentReportable != null)
             _currentReportable.ReportGhostActivity(gameObject);
     }
@@ -219,6 +229,7 @@ public class CharacterControl : MonoBehaviour
 
     void OnRestorePerformed(InputAction.CallbackContext _)
     {
+        if (GhostReveal.IsPreviewingPhoto) return;
         if (_currentRestorable != null)
             _currentRestorable.Restore(gameObject);
     }

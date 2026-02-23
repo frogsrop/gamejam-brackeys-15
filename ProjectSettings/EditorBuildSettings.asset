@@ -11,6 +11,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Game/Scenes/frogsrop.unity
     guid: 3df4355d09fbe8a43a4d80d4de9e75b9
+  - enabled: 1
+    path: Assets/Game/Scenes/WinLoseScene.unity
+    guid: 782acbe001104dd48b0ef6fc4f6838ce
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

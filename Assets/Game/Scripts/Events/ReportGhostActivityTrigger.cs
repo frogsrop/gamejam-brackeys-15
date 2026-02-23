@@ -7,8 +7,14 @@ using UnityEngine.Events;
 /// </summary>
 public class ReportGhostActivityTrigger : MonoBehaviour, IReportGhostActivity, IRestorable
 {
-    /// <summary>Invoked when user reports. Args: node transform, wasGhost, feedback text (ReportedGhostText or ReportedWrongText).</summary>
+    /// <summary>Invoked when user reports. Args: node transform, wasGhost (true = correct guess), feedback text.</summary>
     public static event System.Action<Transform, bool, string> OnReported;
+
+    /// <summary>True if the report was a correct guess (player reported a ghost-activated node).</summary>
+    public static bool WasCorrectGuess(bool wasGhost) => wasGhost;
+
+    /// <summary>True if the report was a wrong guess (player reported a non-ghost node).</summary>
+    public static bool WasWrongGuess(bool wasGhost) => !wasGhost;
     [Tooltip("Shown in the hint panel when in range.")]
     [SerializeField] private string hintText = "Press F to report ghost activity";
     public string HintText => hintText;
@@ -30,6 +36,10 @@ public class ReportGhostActivityTrigger : MonoBehaviour, IReportGhostActivity, I
 
     [Tooltip("Invoked when the player reports ghost activity here (F key).")]
     public UnityEvent<GameObject> onReported;
+    [Tooltip("Invoked when the player reported and it was a correct guess (ghost-activated node).")]
+    public UnityEvent onCorrectGuess;
+    [Tooltip("Invoked when the player reported and it was a wrong guess (non-ghost node).")]
+    public UnityEvent onWrongGuess;
 
     public bool Reportable => reportable && ResolvedNode != null && ResolvedNode.activated;
 
@@ -52,6 +62,16 @@ public class ReportGhostActivityTrigger : MonoBehaviour, IReportGhostActivity, I
             Debug.Log($"[Report] Invoking OnReported for node {n.name}, wasGhost={wasGhost}, hasListeners={hasListeners}");
             var feedbackText = wasGhost ? ReportedGhostText : ReportedWrongText;
             OnReported?.Invoke(n.transform, wasGhost, feedbackText);
+            if (wasGhost)
+            {
+                onCorrectGuess?.Invoke();
+                GameManager.Instance?.OnCorrectGuess();
+            }
+            else
+            {
+                onWrongGuess?.Invoke();
+                GameManager.Instance?.OnWrongGuess();
+            }
         }
         onReported?.Invoke(reporter);
     }
