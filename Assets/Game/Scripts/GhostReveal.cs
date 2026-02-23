@@ -149,24 +149,60 @@ public class GhostReveal : MonoBehaviour
 
         int uiLayer = LayerMask.NameToLayer("UI");
         int excludeMask = (uiLayer >= 0) ? (1 << uiLayer) : 0;
-        int originalCullingMask = cam.cullingMask;
-        float originalAspect = cam.aspect;
-        var originalClearFlags = cam.clearFlags;
-        var originalBackgroundColor = cam.backgroundColor;
+        int cullingMask = cam.cullingMask & ~excludeMask;
 
-        cam.cullingMask = originalCullingMask & ~excludeMask;
-        cam.aspect = 1f;
-        cam.clearFlags = CameraClearFlags.SolidColor;
-        cam.backgroundColor = Color.white;
+        bool usedRoomCapture = false;
+        if (GameManager.Instance != null)
+        {
+            var player = FindFirstObjectByType<CharacterControl>();
+            if (player != null)
+            {
+                int playerRoom = GameManager.Instance.GetRoomIdAtPosition(player.transform.position);
+                Rect roomRect = GameManager.Instance.GetRoomRect(playerRoom);
+                if (playerRoom >= 1 && roomRect.width > 0.01f && roomRect.height > 0.01f)
+                {
+                    var roomCam = new GameObject("RoomCaptureCamera").AddComponent<Camera>();
+                    roomCam.CopyFrom(cam);
+                    roomCam.cullingMask = cullingMask;
+                    roomCam.clearFlags = CameraClearFlags.SolidColor;
+                    roomCam.backgroundColor = Color.white;
+                    roomCam.orthographic = true;
+                    float roomSize = Mathf.Max(roomRect.width, roomRect.height);
+                    roomCam.orthographicSize = roomSize * 0.5f;
+                    Vector3 center = new Vector3(roomRect.x + roomRect.width * 0.5f, roomRect.y + roomRect.height * 0.5f, cam.transform.position.z);
+                    roomCam.transform.position = center;
+                    roomCam.transform.rotation = cam.transform.rotation;
+                    roomCam.aspect = 1f;
+                    roomCam.targetTexture = _captureRt;
+                    roomCam.Render();
+                    roomCam.targetTexture = null;
+                    Destroy(roomCam.gameObject);
+                    usedRoomCapture = true;
+                }
+            }
+        }
 
-        _previousTarget = cam.targetTexture;
-        cam.targetTexture = _captureRt;
-        cam.Render();
-        cam.targetTexture = _previousTarget;
-        cam.cullingMask = originalCullingMask;
-        cam.aspect = originalAspect;
-        cam.clearFlags = originalClearFlags;
-        cam.backgroundColor = originalBackgroundColor;
+        if (!usedRoomCapture)
+        {
+            float originalAspect = cam.aspect;
+            var originalClearFlags = cam.clearFlags;
+            var originalBackgroundColor = cam.backgroundColor;
+            int originalCullingMask = cam.cullingMask;
+
+            cam.cullingMask = cullingMask;
+            cam.aspect = 1f;
+            cam.clearFlags = CameraClearFlags.SolidColor;
+            cam.backgroundColor = Color.white;
+
+            _previousTarget = cam.targetTexture;
+            cam.targetTexture = _captureRt;
+            cam.Render();
+            cam.targetTexture = _previousTarget;
+            cam.cullingMask = originalCullingMask;
+            cam.aspect = originalAspect;
+            cam.clearFlags = originalClearFlags;
+            cam.backgroundColor = originalBackgroundColor;
+        }
 
         if (photoDisplay != null)
         {

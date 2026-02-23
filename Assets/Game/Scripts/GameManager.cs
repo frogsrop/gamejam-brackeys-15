@@ -168,6 +168,14 @@ public class GameManager : MonoBehaviour
     /// <summary>Room bounds in world space (min.x, min.y, max.x, max.y). Derived from vision panels at Start.</summary>
     public IReadOnlyList<Rect> RoomRects => _roomRects;
 
+    /// <summary>Returns the world-space rect for a room (1-based). Returns (0,0,0,0) if invalid.</summary>
+    public Rect GetRoomRect(int roomId)
+    {
+        if (roomId < 1 || _roomRects == null || roomId > _roomRects.Count)
+            return new Rect(0, 0, 0, 0);
+        return _roomRects[roomId - 1];
+    }
+
     List<Rect> _roomRects = new List<Rect>();
 
     /// <summary>Build room rectangles from vision panels: each panel's world position and size define that room's bounds.</summary>
