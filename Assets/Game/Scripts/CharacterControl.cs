@@ -21,6 +21,8 @@ public class CharacterControl : MonoBehaviour
     [SerializeField] private TMP_Text hintsQ;
     [SerializeField] private TMP_Text hintsE;
     [SerializeField] private TMP_Text hintsF;
+    [Tooltip("Text to show report feedback (ReportedGhostText or ReportedWrongText based on guess correctness).")]
+    [SerializeField] private TMP_Text reportFeedbackText;
     [SerializeField] private string defaultHintText = "Press E to interact";
     [Tooltip("Radius for trigger detection when no collider overlap (fallback).")]
     [SerializeField] private float triggerRefreshRadius = 2f;
@@ -61,7 +63,7 @@ public class CharacterControl : MonoBehaviour
 
     void OnEnable()
     {
-        ReportGhostActivityTrigger.OnGhostReported += OnGhostReported;
+        ReportGhostActivityTrigger.OnReported += OnReported;
         if (inputActions == null) return;
         var playerMap = inputActions.FindActionMap("Player");
         _moveAction = playerMap.FindAction("Move");
@@ -80,16 +82,21 @@ public class CharacterControl : MonoBehaviour
             _restoreAction.performed += OnRestorePerformed;
     }
 
-    void OnGhostReported(Transform target)
+    void OnReported(Transform target, bool wasGhost, string feedbackText)
     {
-        Debug.Log($"[Screenshot] OnGhostReported for {target?.name}, RawImage={(screenshotRawImage != null ? "set" : "null")}");
+        Debug.Log($"[Screenshot] OnReported for {target?.name}, wasGhost={wasGhost}, RawImage={(screenshotRawImage != null ? "set" : "null")}");
+        if (reportFeedbackText != null)
+        {
+            reportFeedbackText.text = feedbackText ?? "";
+            reportFeedbackText.gameObject.SetActive(!string.IsNullOrEmpty(feedbackText));
+        }
         if (screenshotRawImage != null)
-            CaptureAndShowScreenshot(target);
+            CaptureAndShowScreenshot(target, wasGhost);
     }
 
     void OnDisable()
     {
-        ReportGhostActivityTrigger.OnGhostReported -= OnGhostReported;
+        ReportGhostActivityTrigger.OnReported -= OnReported;
         if (_interactAction != null)
             _interactAction.performed -= OnInteractPerformed;
         if (_reportAction != null)
@@ -147,20 +154,23 @@ public class CharacterControl : MonoBehaviour
             _currentReportable.ReportGhostActivity(gameObject);
     }
 
-    void CaptureAndShowScreenshot(Transform target)
+    void CaptureAndShowScreenshot(Transform target, bool enableGhostChildren)
     {
         var cam = Camera.main;
         if (cam == null) { Debug.Log("[Screenshot] Aborted - Camera.main null"); return; }
         if (screenshotRawImage == null) { Debug.Log("[Screenshot] Aborted - RawImage null"); return; }
 
-        Debug.Log($"[Screenshot] Making capture for {target?.name}");
+        Debug.Log($"[Screenshot] Making capture for {target?.name}, enableGhostChildren={enableGhostChildren}");
         var ghostObjects = new System.Collections.Generic.List<(GameObject go, bool wasActive)>();
-        foreach (Transform t in target.GetComponentsInChildren<Transform>(true))
+        if (enableGhostChildren)
         {
-            if (t.CompareTag("Ghost"))
+            foreach (Transform t in target.GetComponentsInChildren<Transform>(true))
             {
-                ghostObjects.Add((t.gameObject, t.gameObject.activeSelf));
-                t.gameObject.SetActive(true);
+                if (t.CompareTag("Ghost"))
+                {
+                    ghostObjects.Add((t.gameObject, t.gameObject.activeSelf));
+                    t.gameObject.SetActive(true);
+                }
             }
         }
         var rt = new RenderTexture(captureResolution, captureResolution, 24);
