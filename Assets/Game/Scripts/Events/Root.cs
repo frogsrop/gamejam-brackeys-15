@@ -49,7 +49,8 @@ public class Root : Node
     [Tooltip("Seconds until ghost nodes become normal when they have an active non-ghost parent. -1 = never.")]
     public float ghostToNormalSeconds = -1f;
 
-    void Start() {
+    void Start()
+    {
         InvokeRepeating(nameof(Tick), tickDelaySeconds, tickIntervalSeconds);
     }
 
@@ -57,7 +58,7 @@ public class Root : Node
         var toRemove = new List<Node>();
         var snapshot = new List<KeyValuePair<Node, float>>(_ghostNormalizeTimers);
         foreach (var kv in snapshot) {
-            var node = kv.Key;
+             var node = kv.Key;
             if (!node.activated) { toRemove.Add(node); continue; }
             var remaining = kv.Value - Time.deltaTime;
             if (remaining <= 0f) {

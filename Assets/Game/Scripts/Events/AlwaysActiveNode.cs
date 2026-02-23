@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AlwaysActiveNode : Node
 {
-    void Awake() {}
+    protected override void Awake() { base.Awake(); }
 
     public override void ActivateNode() { }
     public override void RestoreNode() { activatedByGhost = false; }
