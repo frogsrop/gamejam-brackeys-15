@@ -11740,7 +11740,7 @@ MonoBehaviour:
   loop: 1
   audioLoop: 0
   deactivationTimer: -1
-  restoreByRewind: 0
+  restoreByRewind: 1
   audioSource: {fileID: 0}
 --- !u!114 &1938936340
 MonoBehaviour:
