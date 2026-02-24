@@ -216,7 +216,7 @@ public class CharacterControl : MonoBehaviour
             prev.Release();
         screenshotRawImage.texture = rt;
         screenshotRawImage.uvRect = new Rect(0, 0, 1, 1);
-        if (enableGhostChildren && GameManager.Instance != null)
+        if (GameManager.Instance != null)
             GameManager.SetScreenshotFromRenderTexture(rt);
         var parent = screenshotRawImage.rectTransform.parent as RectTransform;
         var photoRoot = parent != null ? parent : screenshotRawImage.rectTransform;
