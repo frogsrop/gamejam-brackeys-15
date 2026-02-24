@@ -354,7 +354,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 9.1033, y: 6.548}
-  m_SizeDelta: {x: 1009.7445, y: 632.5037}
+  m_SizeDelta: {x: 1500, y: 1500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &147733432
 MonoBehaviour:
@@ -791,8 +791,9 @@ MonoBehaviour:
   directorButton: {fileID: 538629654}
   aiGhostText: '- Ghost always triggers the doors\n- Look for patterns\n- Ghost is
     roaming around search for inconsistencies to catch it '
-  directorText: '- Ghost never triggers events in your room\n- Search for mismatch
-    in events\n- Fix things to catch the ghost'
+  directorText: '- Ghost never triggers events in your room. Take your time see what
+    strange things you can find\n- Search for mismatch in events. But dont rush reporting
+    them you have only 3 lives\n- Fix things to catch the ghost'
 --- !u!1 &1316565542
 GameObject:
   m_ObjectHideFlags: 0
