@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
     [Header("Win / Lose")]
     [Tooltip("Scene to load on Win or Lose. Result is stored in GameManager.LastGameWon (true = win, false = lose).")]
     [SerializeField] private string winLoseSceneName = "WinLoseScene";
-    [Tooltip("Seconds to wait after correct ghost report before loading the win scene (lets player see feedback/screenshot).")]
-    [SerializeField] private float delayBeforeWinSeconds = 2f;
+    [Tooltip("Seconds to wait after correct ghost report before loading the win scene. Set to 0 for instant transition.")]
+    [SerializeField] private float delayBeforeWinSeconds = 0.5f;
 
     /// <summary>Set before loading WinLose scene. Read in that scene's Start to know if the player won or lost.</summary>
     public static bool LastGameWon { get; private set; }

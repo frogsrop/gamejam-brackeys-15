@@ -957,7 +957,7 @@ MonoBehaviour:
   topLeftPadding: {x: 0.1, y: 0.1}
   worldSpaceCamera: {fileID: 0}
   winLoseSceneName: WinLoseScene
-  delayBeforeWinSeconds: 2
+  delayBeforeWinSeconds: 0
   logRoomDetection: 1
 --- !u!1 &62635903
 GameObject:

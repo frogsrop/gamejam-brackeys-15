@@ -105,9 +105,8 @@ public class GhostReveal : MonoBehaviour
         if (revealSound != null && _audioSource != null)
             _audioSource.PlayOneShot(revealSound);
 
-        // Take a picture of the player's room (main camera view); ghost appears in picture only when same room
-        CaptureAndShowPhoto();
-
+        // Capture the room; when sameRoom (player won) we don't show the in-game preview
+        DoCapture();
         if (GameManager.Instance != null)
         {
             var player = FindFirstObjectByType<CharacterControl>();
@@ -126,6 +125,15 @@ public class GhostReveal : MonoBehaviour
             }
         }
 
+        if (sameRoom)
+        {
+            if (_spriteRenderer != null)
+                _spriteRenderer.enabled = false;
+            _revealCoroutine = null;
+            yield break;
+        }
+
+        ShowPhotoPanel();
         yield return new WaitForSeconds(revealDuration);
 
         if (_spriteRenderer != null)
@@ -135,7 +143,8 @@ public class GhostReveal : MonoBehaviour
         _revealCoroutine = null;
     }
 
-    void CaptureAndShowPhoto()
+    /// <summary>Captures the current room into _captureRt. Does not show the photo panel.</summary>
+    void DoCapture()
     {
         var cam = Camera.main;
         if (cam == null) return;
@@ -203,7 +212,10 @@ public class GhostReveal : MonoBehaviour
             cam.clearFlags = originalClearFlags;
             cam.backgroundColor = originalBackgroundColor;
         }
+    }
 
+    void ShowPhotoPanel()
+    {
         if (photoDisplay != null)
         {
             if (photoDisplay.texture is RenderTexture prev && prev != _captureRt)
