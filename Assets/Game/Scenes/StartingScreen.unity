@@ -790,7 +790,8 @@ MonoBehaviour:
   aiGhostButton: {fileID: 443027520}
   directorButton: {fileID: 538629654}
   aiGhostText: '- Ghost always triggers the doors\n- Look for patterns\n- Ghost is
-    roaming around search for inconsistencies to catch it '
+    roaming around search for inconsistencies to catch it\nWASD - walk\nE - enter
+    the door\nSpace - take a photo'
   directorText: '- Ghost never triggers events in your room. Take your time see what
     strange things you can find\n- Search for mismatch in events. But dont rush reporting
     them you have only 3 lives\n- Fix things to catch the ghost'
