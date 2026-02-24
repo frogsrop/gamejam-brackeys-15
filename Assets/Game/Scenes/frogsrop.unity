@@ -883,7 +883,10 @@ MonoBehaviour:
   activated: 1
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
+  audioLoop: 0
+  audioSource: {fileID: 0}
 --- !u!1 &192052404
 GameObject:
   m_ObjectHideFlags: 0
@@ -2091,10 +2094,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 0
+  audioLoop: 0
   deactivationTimer: -1
   restoreByRewind: 0
+  audioSource: {fileID: 0}
 --- !u!1 &339577277
 GameObject:
   m_ObjectHideFlags: 0
@@ -2246,11 +2252,12 @@ Transform:
   m_GameObject: {fileID: 370849884}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.86, y: 17.887, z: 0}
+  m_LocalPosition: {x: 0.86, y: 17.887, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 732352579}
+  - {fileID: 1311121020}
   m_Father: {fileID: 469097073}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &370849888
@@ -2270,10 +2277,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 0
+  audioLoop: 1
   deactivationTimer: -1
   restoreByRewind: 0
+  audioSource: {fileID: 1311121021}
 --- !u!111 &370849889
 Animation:
   m_ObjectHideFlags: 0
@@ -2395,7 +2405,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 328073569}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 70.434}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &444943996
 SpriteRenderer:
   serializedVersion: 2
@@ -2654,6 +2664,7 @@ MonoBehaviour:
   activated: 1
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 0
   drawTreeGizmos: 1
   lineColorActivatedToActivated: {r: 0, g: 1, b: 0, a: 1}
@@ -2662,10 +2673,13 @@ MonoBehaviour:
   lineColorActive: {r: 0.2, g: 1, b: 0.3, a: 1}
   lineColorInactive: {r: 0.5, g: 0.5, b: 0.5, a: 0.8}
   nodeSphereRadius: 1.3
-  tickIntervalSeconds: 5
-  tickDelaySeconds: 5
-  ghostEventChance: 0.48
+  tickIntervalSeconds: 2
+  tickDelaySeconds: 2
+  ghostEventChance: 1
   ghostToNormalSeconds: 2
+  probHasGhostChild: 0.501
+  probInPlayerRoom: 0.256
+  probRandom: 0.243
 --- !u!1 &490847968
 GameObject:
   m_ObjectHideFlags: 0
@@ -2824,7 +2838,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2069820571}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6.52721}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 54.024696}
 --- !u!212 &532804448
 SpriteRenderer:
   serializedVersion: 2
@@ -3571,10 +3585,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 1
+  audioLoop: 0
   deactivationTimer: 6
   restoreByRewind: 0
+  audioSource: {fileID: 0}
 --- !u!111 &601486069
 Animation:
   m_ObjectHideFlags: 0
@@ -3786,7 +3803,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2069820571}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -16.483719}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -58.477036}
 --- !u!212 &621106492
 SpriteRenderer:
   serializedVersion: 2
@@ -3877,7 +3894,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2069820571}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 18.153826}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 81.96786}
 --- !u!212 &655239854
 SpriteRenderer:
   serializedVersion: 2
@@ -4563,7 +4580,7 @@ Transform:
   m_GameObject: {fileID: 757236526}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.031, y: -0.336, z: 0}
+  m_LocalPosition: {x: 1.031, y: -0.39, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4587,10 +4604,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 0
+  audioLoop: 0
   deactivationTimer: -1
   restoreByRewind: 0
+  audioSource: {fileID: 0}
 --- !u!111 &757236529
 Animation:
   m_ObjectHideFlags: 0
@@ -4668,8 +4688,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReportGhostActivityTrigger
   hintText: Press F to report ghost activity
   restoreHintText: Press Q to restore
-  reportedWrongText: 
-  reportedGhostText: 
+  reportedWrongText: It just leaked from the second floor
+  reportedGhostText: This puddle made by a ghost!
   node: {fileID: 0}
   reportable: 1
   onReported:
@@ -4772,6 +4792,97 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &784571007
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 784571008}
+  - component: {fileID: 784571009}
+  m_Layer: 0
+  m_Name: Ghost
+  m_TagString: Ghost
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &784571008
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784571007}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.003, y: -0.017, z: -1}
+  m_LocalScale: {x: 0.090909086, y: 0.090909086, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1252088835}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &784571009
+SpriteRenderer:
+  serializedVersion: 2
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 784571007}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_Sprite: {fileID: 4448715427215634006, guid: a028b248efc4a419b9b0a2aae7ecca73, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 4.97, y: 4.66}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_SpriteSortPoint: 0
 --- !u!1 &791259803
 GameObject:
   m_ObjectHideFlags: 0
@@ -4817,7 +4928,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 078411df3211bb7419c7faa858259b50, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.23
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -5198,7 +5309,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1506009458}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -0.81483275}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &888824787
 SpriteRenderer:
   serializedVersion: 2
@@ -6579,6 +6690,8 @@ GameObject:
   - component: {fileID: 1252088835}
   - component: {fileID: 1252088837}
   - component: {fileID: 1252088836}
+  - component: {fileID: 1252088838}
+  - component: {fileID: 1252088839}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -6600,6 +6713,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1290282741}
+  - {fileID: 784571008}
   m_Father: {fileID: 469097073}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1252088836
@@ -6618,10 +6732,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 0200000001000000
   autoDetectRoomByPanel: 1
   loop: 0
+  audioLoop: 0
   deactivationTimer: 5
   restoreByRewind: 1
+  audioSource: {fileID: 0}
 --- !u!95 &1252088837
 Animator:
   serializedVersion: 7
@@ -6644,6 +6761,79 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1252088838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252088834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e346d2cfb5fc441a90a79d22706484, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ReportGhostActivityTrigger
+  hintText: Press F to report ghost activity
+  restoreHintText: Press Q to restore
+  reportedWrongText: Must've been a wind
+  reportedGhostText: Wow, the windows is clossed, but door stil moving
+  node: {fileID: 0}
+  reportable: 1
+  onReported:
+    m_PersistentCalls:
+      m_Calls: []
+  onCorrectGuess:
+    m_PersistentCalls:
+      m_Calls: []
+  onWrongGuess:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!61 &1252088839
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252088834}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.0010622814, y: -0.012748659}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.1607259, y: 1.1869773}
+  m_EdgeRadius: 0
 --- !u!1 &1262491493
 GameObject:
   m_ObjectHideFlags: 0
@@ -6945,6 +7135,135 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c3510a45c2f06c42b7556ab57f7c008, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TeleporterPad
+--- !u!1 &1311121019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1311121020}
+  - component: {fileID: 1311121021}
+  m_Layer: 0
+  m_Name: sound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1311121020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311121019}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -12.96, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 370849885}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1311121021
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1311121019}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: e2d7a4566e1426c4ebbb72a8c733a904, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 7.568658
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.681
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1398514226
 GameObject:
   m_ObjectHideFlags: 0
@@ -6976,7 +7295,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 328073569}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 88.117}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1398514228
 SpriteRenderer:
   serializedVersion: 2
@@ -7255,7 +7574,7 @@ Transform:
   - {fileID: 888824786}
   - {fileID: 2135006627}
   m_Father: {fileID: 469097073}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.46477413}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1506009459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7273,10 +7592,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 1
+  audioLoop: 1
   deactivationTimer: -1
   restoreByRewind: 0
+  audioSource: {fileID: 1506009463}
 --- !u!111 &1506009460
 Animation:
   m_ObjectHideFlags: 0
@@ -7308,8 +7630,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReportGhostActivityTrigger
   hintText: Press F to report ghost activity
   restoreHintText: Press Q to restore
-  reportedWrongText: 
-  reportedGhostText: 
+  reportedWrongText: "It\u2019s just the voltage is fluctuating"
+  reportedGhostText: What the hell?! It turned on by itself
   node: {fileID: 0}
   reportable: 1
   onReported:
@@ -7378,8 +7700,8 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_Resource: {fileID: 8300000, guid: b10d43eb2474c27499196c92d1a8c781, type: 3}
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -7389,9 +7711,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 56.93305
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -7424,7 +7746,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 0.709
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -7971,7 +8293,10 @@ MonoBehaviour:
   activated: 1
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
+  audioLoop: 0
+  audioSource: {fileID: 0}
 --- !u!212 &1578260643
 SpriteRenderer:
   serializedVersion: 2
@@ -8031,6 +8356,153 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!1 &1581262956
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1581262957}
+  - component: {fileID: 1581262958}
+  m_Layer: 0
+  m_Name: sound
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1581262957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581262956}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -15.03, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1661004136}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1581262958
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581262956}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: e2d7a4566e1426c4ebbb72a8c733a904, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 9.413343
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.18693347
+      value: 1
+      inSlope: -5.351636
+      outSlope: -5.351636
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.37386695
+      value: 0.5
+      inSlope: -1.337909
+      outSlope: -1.337909
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.7477339
+      value: 0.25
+      inSlope: -0.33447725
+      outSlope: -0.33447725
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: -0.18700808
+      outSlope: -0.18700808
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1587616078
 GameObject:
   m_ObjectHideFlags: 0
@@ -8364,6 +8836,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 791259804}
+  - {fileID: 1581262957}
   m_Father: {fileID: 469097073}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1661004138
@@ -8383,7 +8856,10 @@ MonoBehaviour:
   activated: 1
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
+  audioLoop: 1
+  audioSource: {fileID: 1581262958}
 --- !u!212 &1661004139
 SpriteRenderer:
   serializedVersion: 2
@@ -9168,10 +9644,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 1
+  audioLoop: 0
   deactivationTimer: -1
   restoreByRewind: 0
+  audioSource: {fileID: 0}
 --- !u!111 &1807850524
 Animation:
   m_ObjectHideFlags: 0
@@ -9642,7 +10121,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 328073569}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -91.841}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2036835869
 SpriteRenderer:
   serializedVersion: 2
@@ -9715,6 +10194,7 @@ GameObject:
   - component: {fileID: 2069820573}
   - component: {fileID: 2069820575}
   - component: {fileID: 2069820574}
+  - component: {fileID: 2069820576}
   m_Layer: 0
   m_Name: Shelves
   m_TagString: Untagged
@@ -9758,10 +10238,13 @@ MonoBehaviour:
   activated: 0
   activatedByGhost: 0
   roomId: 0
+  roomIds: 
   autoDetectRoomByPanel: 1
   loop: 0
+  audioLoop: 0
   deactivationTimer: -1
   restoreByRewind: 0
+  audioSource: {fileID: 2069820576}
 --- !u!111 &2069820573
 Animation:
   m_ObjectHideFlags: 0
@@ -9852,6 +10335,103 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 5.248745, y: 9.848303}
   m_EdgeRadius: 0
+--- !u!82 &2069820576
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069820570}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 60f3d3ee94082bb419be2782ee0716dd, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 24.758911
+  Pan2D: 0
+  rolloffMode: 1
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.724
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &2075833772
 GameObject:
   m_ObjectHideFlags: 0

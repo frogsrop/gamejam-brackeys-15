@@ -49,6 +49,22 @@ public class Root : Node
     [Tooltip("Seconds until ghost nodes become normal when they have an active non-ghost parent. -1 = never.")]
     public float ghostToNormalSeconds = -1f;
 
+    [Header("Non-Ghost Selection Strategy")]
+    [Tooltip("Probability: prefer node that has a child activated by ghost. Can move Player and Random.")]
+    [Range(0f, 1f)] [SerializeField] private float probHasGhostChild = 0.33f;
+    [Tooltip("Probability: prefer node (or node with child) in player's room. Can only move Random.")]
+    [Range(0f, 1f)] [SerializeField] private float probInPlayerRoom = 0.33f;
+    [Tooltip("Random (remainder). Read-only, computed from above.")]
+    [SerializeField] [ReadOnly] private float probRandom = 0.34f;
+
+    float ProbRandom => probRandom;
+
+    void OnValidate()
+    {
+        probInPlayerRoom = Mathf.Clamp(probInPlayerRoom, 0f, 1f - probHasGhostChild);
+        probRandom = Mathf.Max(0f, 1f - probHasGhostChild - probInPlayerRoom);
+    }
+
     void Start()
     {
         InvokeRepeating(nameof(Tick), tickDelaySeconds, tickIntervalSeconds);
@@ -134,8 +150,56 @@ public class Root : Node
     }
     public Node? SelectFromChildrenOfActivated() {
         if (_childrenOfActivated.Count == 0) return null;
-        if (selectionStrategy != null) return selectionStrategy(_childrenOfActivated, this);
+        var candidates = PickCandidatesByStrategy();
+        if (candidates.Count == 0) return null;
+        if (selectionStrategy != null) return selectionStrategy(candidates, this);
         return null;
+    }
+
+    List<Node> PickCandidatesByStrategy() {
+        var list1 = BuildNodesWithGhostActivatedChild();
+        var list2 = BuildNodesInPlayerRoom();
+        float p1 = probHasGhostChild;
+        float p2 = probInPlayerRoom;
+        float p3 = ProbRandom;
+        float r = UnityEngine.Random.value;
+        if (r < p1 && list1.Count > 0) return list1;
+        if (r < p1 + p2 && list2.Count > 0) return list2;
+        return _childrenOfActivated;
+    }
+
+    List<Node> BuildNodesWithGhostActivatedChild() {
+        var result = new List<Node>();
+        foreach (var node in _childrenOfActivated) {
+            foreach (var child in node.nodeChildren) {
+                if (child.activatedByGhost) {
+                    result.Add(node);
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
+    List<Node> BuildNodesInPlayerRoom() {
+        var result = new List<Node>();
+        var player = FindFirstObjectByType<CharacterControl>();
+        if (player == null || GameManager.Instance == null) return result;
+        int playerRoom = GameManager.Instance.GetRoomIdAtPosition(player.transform.position);
+        if (playerRoom == 0) return result;
+        foreach (var node in _childrenOfActivated) {
+            if (NodeOrDescendantInRoom(node, playerRoom))
+                result.Add(node);
+        }
+        return result;
+    }
+
+    bool NodeOrDescendantInRoom(Node node, int room) {
+        if (node.IsInRoom(room)) return true;
+        foreach (var child in node.nodeChildren) {
+            if (NodeOrDescendantInRoom(child, room)) return true;
+        }
+        return false;
     }
 
     void BuildNodesWithNoActiveParent() {
@@ -160,8 +224,25 @@ public class Root : Node
 
     public Node? SelectFromNodesWithNoActiveParent() {
         if (_nodesWithNoActiveParent.Count == 0) return null;
-        if (ghostSelectionStrategy != null) return ghostSelectionStrategy(_nodesWithNoActiveParent, this);
+        var candidates = FilterOutNodesInPlayerRoom(_nodesWithNoActiveParent);
+        if (candidates.Count == 0) return null;
+        if (ghostSelectionStrategy != null) return ghostSelectionStrategy(candidates, this);
         return null;
+    }
+
+    /// <summary>Excludes nodes that are in the same room as the player. Ghost should not activate in player's room.</summary>
+    List<Node> FilterOutNodesInPlayerRoom(List<Node> nodes) {
+        if (nodes == null || nodes.Count == 0) return nodes;
+        var player = FindFirstObjectByType<CharacterControl>();
+        if (player == null || GameManager.Instance == null) return nodes;
+        int playerRoom = GameManager.Instance.GetRoomIdAtPosition(player.transform.position);
+        if (playerRoom == 0) return nodes;
+        var filtered = new List<Node>();
+        foreach (var n in nodes) {
+            if (!n.IsInRoom(playerRoom))
+                filtered.Add(n);
+        }
+        return filtered;
     }
 
     public void RestoreActivatedNodesNear(Vector3 position, float radius) {
