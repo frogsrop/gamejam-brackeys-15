@@ -129,7 +129,7 @@ public class CharacterControl : MonoBehaviour
             PositionHints();
         animator.SetFloat("WalkSpeed", Mathf.Abs(_moveInput));
         Vector3 s = gameObject.transform.localScale;
-        var newScale = new Vector3(Mathf.Sign(-_moveInput), s.y, s.z);
+        var newScale = new Vector3(Mathf.Sign(-_moveInput) * Mathf.Abs(s.x), s.y, s.z);
         if (Mathf.Abs(_moveInput) > 0) {
             gameObject.transform.localScale = newScale;
         }

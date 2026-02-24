@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 #nullable enable
 
 public class Root : Node
@@ -31,6 +32,10 @@ public class Root : Node
     [Header("Debug")]
     [Tooltip("Draw node tree in Scene view (Gizmos).")]
     public bool drawTreeGizmos = true;
+    [Tooltip("Log detailed tick flow to diagnose why a node never activates. Set debugNodeName to focus on a specific node (e.g. train).")]
+    [SerializeField] private bool logTickDetails = false;
+    [Tooltip("Optional: only log when this node name is relevant. Case-insensitive. E.g. train.")]
+    [SerializeField] private string debugNodeName = "";
     [HideInInspector] public Color lineColorActivatedToActivated = Color.green;
     [HideInInspector] public Color lineColorActivatedToInactive = Color.yellow;
     [HideInInspector] public Color lineColorInactiveToInactive = Color.red;
@@ -87,25 +92,50 @@ public class Root : Node
         foreach (var n in toRemove) _ghostNormalizeTimers.Remove(n);
     }
 
+    bool ShouldLog(Node? n) => !string.IsNullOrEmpty(debugNodeName) && n != null &&
+        string.Equals(n.gameObject.name, debugNodeName, System.StringComparison.OrdinalIgnoreCase);
+
+    bool ShouldLogAny(System.Collections.Generic.IEnumerable<Node> nodes) {
+        if (string.IsNullOrEmpty(debugNodeName)) return false;
+        foreach (var n in nodes)
+            if (n != null && string.Equals(n.gameObject.name, debugNodeName, System.StringComparison.OrdinalIgnoreCase))
+                return true;
+        return false;
+    }
+
     void Tick() {
         WalkTreeAndUpdateNodes(this);
         RunSelector();
         BuildNodesWithNoActiveParent();
         var ghost = UnityEngine.Random.value < ghostEventChance;
+        if (logTickDetails) {
+            Debug.Log($"[Root] Tick: ghost={ghost}, activated=[{string.Join(", ", System.Linq.Enumerable.Select(_activatedNodes, x => x.gameObject.name))}], " +
+                $"childrenOfActivated=[{string.Join(", ", System.Linq.Enumerable.Select(_childrenOfActivated, x => x.gameObject.name))}], " +
+                $"nodesWithNoActiveParent=[{string.Join(", ", System.Linq.Enumerable.Select(_nodesWithNoActiveParent, x => x.gameObject.name))}]");
+        }
         if (ghost) {
             var n = SelectFromNodesWithNoActiveParent();
-            if (n != null) { n.activatedByGhost = true; n.ActivateNode(); }
+            if (logTickDetails || ShouldLog(n))
+                Debug.Log($"[Root] Ghost selected: {(n != null ? n.gameObject.name : "null")}");
+            if (n != null) { n.activatedByGhost = true; n.Activate(); }
         } else {
             var n = SelectFromChildrenOfActivated();
-            if (n != null) { n.activatedByGhost = false; n.ActivateNode(); }
+            if (logTickDetails || ShouldLog(n))
+                Debug.Log($"[Root] Normal selected: {(n != null ? n.gameObject.name : "null")}");
+            if (n != null) { n.activatedByGhost = false; n.Activate(); }
         }
         StartGhostNormalizeTimers();
     }
 
     void StartGhostNormalizeTimers() {
         void Walk(Node node, Node? parent) {
+            if (node == null) return;
             if (node == this) {
-                foreach (var c in node.nodeChildren) Walk(c, this);
+                if (node.nodeChildren != null) {
+                    foreach (var c in node.nodeChildren) {
+                        if (c != null) Walk(c, this);
+                    }
+                }
                 return;
             }
             var directParentIsActiveNonGhost = parent != null && parent != this && parent.activated && !parent.activatedByGhost;
@@ -113,16 +143,23 @@ public class Root : Node
                 if (!_ghostNormalizeTimers.ContainsKey(node))
                     _ghostNormalizeTimers[node] = ghostToNormalSeconds;
             }
-            foreach (var c in node.nodeChildren)
-                Walk(c, node);
+            if (node.nodeChildren != null) {
+                foreach (var c in node.nodeChildren) {
+                    if (c != null) Walk(c, node);
+                }
+            }
         }
         Walk(this, null);
     }
 
     void WalkTreeAndUpdateNodes(Node node) {
+        if (node == null) return;
         if (node != this) node.UpdateNode();
-        foreach (var child in node.nodeChildren)
-            WalkTreeAndUpdateNodes(child);
+        if (node.nodeChildren == null) return;
+        foreach (var child in node.nodeChildren) {
+            if (child != null)
+                WalkTreeAndUpdateNodes(child);
+        }
     }
 
     void RunSelector() {
@@ -134,16 +171,27 @@ public class Root : Node
     }
 
     void CollectActivated(Node node) {
+        if (node == null) return;
         if (node != this && node.activated)
             _activatedNodes.Add(node);
-        foreach (var child in node.nodeChildren)
-            CollectActivated(child);
+        if (node.nodeChildren == null) return;
+        foreach (var child in node.nodeChildren) {
+            if (child != null) CollectActivated(child);
+        }
     }
 
     void BuildChildrenOfActivated() {
+        // Root counts as active: its direct children are candidates for normal flow
+        if (nodeChildren != null) {
+            foreach (var child in nodeChildren) {
+                if (child != null && !child.activated && !_childrenOfActivated.Contains(child))
+                    _childrenOfActivated.Add(child);
+            }
+        }
         foreach (var node in _activatedNodes) {
+            if (node?.nodeChildren == null) continue;
             foreach (var child in node.nodeChildren) {
-                if (!child.activated && !_childrenOfActivated.Contains(child))
+                if (child != null && !child.activated && !_childrenOfActivated.Contains(child))
                     _childrenOfActivated.Add(child);
             }
         }
@@ -151,7 +199,16 @@ public class Root : Node
     public Node? SelectFromChildrenOfActivated() {
         if (_childrenOfActivated.Count == 0) return null;
         var candidates = PickCandidatesByStrategy();
+        candidates = FilterByCooldown(candidates);
         if (candidates.Count == 0) return null;
+        if (!string.IsNullOrEmpty(debugNodeName)) {
+            bool inChildren = _childrenOfActivated.Any(c => c != null && string.Equals(c.gameObject.name, debugNodeName, System.StringComparison.OrdinalIgnoreCase));
+            bool inCandidates = candidates.Any(c => c != null && string.Equals(c.gameObject.name, debugNodeName, System.StringComparison.OrdinalIgnoreCase));
+            if (!inChildren)
+                Debug.Log($"[Root] Normal: '{debugNodeName}' not in childrenOfActivated (need parent activated first). Activated={string.Join(", ", _activatedNodes.Select(x => x.gameObject.name))}");
+            else if (!inCandidates)
+                Debug.Log($"[Root] Normal: '{debugNodeName}' in childrenOfActivated but filtered by strategy. Candidates={string.Join(", ", candidates.Select(x => x.gameObject.name))}");
+        }
         if (selectionStrategy != null) return selectionStrategy(candidates, this);
         return null;
     }
@@ -171,8 +228,9 @@ public class Root : Node
     List<Node> BuildNodesWithGhostActivatedChild() {
         var result = new List<Node>();
         foreach (var node in _childrenOfActivated) {
+            if (node?.nodeChildren == null) continue;
             foreach (var child in node.nodeChildren) {
-                if (child.activatedByGhost) {
+                if (child != null && child.activatedByGhost) {
                     result.Add(node);
                     break;
                 }
@@ -195,9 +253,11 @@ public class Root : Node
     }
 
     bool NodeOrDescendantInRoom(Node node, int room) {
+        if (node == null) return false;
         if (node.IsInRoom(room)) return true;
+        if (node.nodeChildren == null) return false;
         foreach (var child in node.nodeChildren) {
-            if (NodeOrDescendantInRoom(child, room)) return true;
+            if (child != null && NodeOrDescendantInRoom(child, room)) return true;
         }
         return false;
     }
@@ -208,9 +268,13 @@ public class Root : Node
     }
 
     void CollectNodesWithNoActiveParent(Node node, Node? parent) {
+        if (node == null) return;
         if (node == this) {
-            foreach (var child in node.nodeChildren)
-                CollectNodesWithNoActiveParent(child, this);
+            if (node.nodeChildren != null) {
+                foreach (var child in node.nodeChildren) {
+                    if (child != null) CollectNodesWithNoActiveParent(child, this);
+                }
+            }
             return;
         }
         if (!node.activated) {
@@ -218,16 +282,50 @@ public class Root : Node
             if (!parentIsActive)
                 _nodesWithNoActiveParent.Add(node);
         }
-        foreach (var child in node.nodeChildren)
-            CollectNodesWithNoActiveParent(child, node);
+        if (node.nodeChildren != null) {
+            foreach (var child in node.nodeChildren) {
+                if (child != null) CollectNodesWithNoActiveParent(child, node);
+            }
+        }
     }
 
     public Node? SelectFromNodesWithNoActiveParent() {
         if (_nodesWithNoActiveParent.Count == 0) return null;
-        var candidates = FilterOutNodesInPlayerRoom(_nodesWithNoActiveParent);
+        var afterRoom = FilterOutNodesInPlayerRoom(_nodesWithNoActiveParent);
+        var afterGhost = FilterGhostActivatable(afterRoom);
+        var candidates = FilterByCooldown(afterGhost);
+        if (!string.IsNullOrEmpty(debugNodeName)) {
+            foreach (var n in _nodesWithNoActiveParent) {
+                if (n == null || !string.Equals(n.gameObject.name, debugNodeName, System.StringComparison.OrdinalIgnoreCase)) continue;
+                bool excludedByRoom = !afterRoom.Contains(n);
+                bool excludedByGhost = afterRoom.Contains(n) && !afterGhost.Contains(n);
+                bool excludedByCooldown = afterGhost.Contains(n) && !candidates.Contains(n);
+                Debug.Log($"[Root] Ghost candidate '{n.gameObject.name}': room={(excludedByRoom ? "excluded" : "kept")}, ghostActivatable={(excludedByGhost ? "excluded" : "kept")}, cooldown={(excludedByCooldown ? "excluded" : "kept")}, RoomId={n.RoomId}");
+            }
+        }
         if (candidates.Count == 0) return null;
         if (ghostSelectionStrategy != null) return ghostSelectionStrategy(candidates, this);
         return null;
+    }
+
+    List<Node> FilterGhostActivatable(List<Node> nodes) {
+        if (nodes == null || nodes.Count == 0) return nodes;
+        var filtered = new List<Node>();
+        foreach (var n in nodes) {
+            if (n != null && n.GhostActivatable)
+                filtered.Add(n);
+        }
+        return filtered;
+    }
+
+    List<Node> FilterByCooldown(List<Node> nodes) {
+        if (nodes == null || nodes.Count == 0) return nodes;
+        var filtered = new List<Node>();
+        foreach (var n in nodes) {
+            if (n != null && n.IsCooldownComplete)
+                filtered.Add(n);
+        }
+        return filtered;
     }
 
     /// <summary>Excludes nodes that are in the same room as the player. Ghost should not activate in player's room.</summary>
@@ -261,24 +359,29 @@ public class Root : Node
     void DrawTree(Node node, Node? parent) {
         if (node == null) return;
         if (node == this) {
-            foreach (var child in node.nodeChildren) {
-                if (child != null) DrawTree(child, node);
+            if (node.nodeChildren != null) {
+                foreach (var child in node.nodeChildren) {
+                    if (child != null) DrawTree(child, node);
+                }
             }
             return;
         }
         Vector3 pos = node.transform.position;
         if (parent != null && parent != this) {
-            Gizmos.color = parent.activated && node.activated ? lineColorActivatedToActivated
-                : parent.activated && !node.activated ? lineColorActivatedToInactive
-                : !parent.activated && !node.activated ? lineColorInactiveToInactive
+            bool parentActive = parent.activated;
+            Gizmos.color = parentActive && node.activated ? lineColorActivatedToActivated
+                : parentActive && !node.activated ? lineColorActivatedToInactive
+                : !parentActive && !node.activated ? lineColorInactiveToInactive
                 : lineColorActivatedToInactive; // inactive -> activated: use yellow
             Gizmos.DrawLine(parent.transform.position, pos);
         }
-        bool hasActivatedParent = parent != null && parent != this && parent.activated;
+        bool hasActivatedParent = parent != null && (parent == this || parent.activated);
         Gizmos.color = node.activatedByGhost ? Color.white : node.activated ? Color.green : hasActivatedParent ? Color.yellow : Color.red;
         Gizmos.DrawWireSphere(pos, nodeSphereRadius);
-        foreach (var child in node.nodeChildren) {
-            if (child != null) DrawTree(child, node);
+        if (node.nodeChildren != null) {
+            foreach (var child in node.nodeChildren) {
+                if (child != null) DrawTree(child, node);
+            }
         }
     }
 }

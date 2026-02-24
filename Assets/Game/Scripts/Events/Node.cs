@@ -15,6 +15,27 @@ public abstract class Node : MonoBehaviour
     /// <summary>True if this node was activated by ghost event (not normal parent-child flow).</summary>
     public bool activatedByGhost = false;
 
+    [Tooltip("If false, ghost cannot activate this node. True by default.")]
+    [SerializeField] private bool ghostActivatable = true;
+
+    /// <summary>If false, ghost cannot activate this node.</summary>
+    public bool GhostActivatable => ghostActivatable;
+
+    [Tooltip("Seconds before this node can be activated again. 0 = no cooldown.")]
+    [SerializeField] private float cooldownSeconds = 0f;
+
+    float _lastActivatedTime = -9999f;
+
+    /// <summary>True if cooldown has finished (or is 0) and node can be activated.</summary>
+    public bool IsCooldownComplete => cooldownSeconds <= 0f || (Time.time - _lastActivatedTime) >= cooldownSeconds;
+
+    /// <summary>Call to activate; records time for cooldown. Root uses this instead of ActivateNode directly.</summary>
+    public void Activate()
+    {
+        _lastActivatedTime = Time.time;
+        ActivateNode();
+    }
+
     [Tooltip("0 = outside, 1-6 = room index (matches GameManager vision panels). Used when Auto-detect Room By Panel is off.")]
     [SerializeField] private int roomId = Outside;
 
